@@ -1,22 +1,13 @@
 import * as Yargs from 'yargs';
-import { existsSync } from 'fs';
-import { EOL } from 'os';
-import { processFile } from './process-file';
+import { CssProcessor } from './processor/css-processor';
+import { FindSourcePositionModule } from './debug/find-source-position';
 
 type CliArgs = {
   files: readonly string[];
 };
 
-function reportInvalidFiles(files: readonly string[]) {
-  const nonExistingFiles = files.filter((file) => !existsSync(file));
-  throw new Error(
-    ['the following files do not exists', ...nonExistingFiles].join(EOL),
-  );
-}
-
 function handler({ files }: CliArgs) {
-  reportInvalidFiles(files);
-  files.forEach((file) => processFile(file));
+  files.forEach((file) => CssProcessor.fromCssFile(file));
 }
 
 export function main(): void {
@@ -31,6 +22,11 @@ export function main(): void {
       }) as any,
     handler,
   })
+    .command(
+      'find-source',
+      'find the source code based on the position',
+      FindSourcePositionModule,
+    )
     .strict(true)
     .exitProcess(true)
     .demandCommand()
