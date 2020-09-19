@@ -1,0 +1,14 @@
+.foo {
+  color: blue;
+  line-height: 15px;
+}
+
+  .bar {
+  color: red;
+  font-size: 16px;
+}
+
+.bar, .foobar {
+  width: 100px;
+  height: 200px;
+}
