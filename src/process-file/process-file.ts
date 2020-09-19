@@ -8,7 +8,8 @@ export function processFile(
   }: {
     readFileSync?: typeof _readFileSync;
   } = {},
-) {
+): string {
   const content = readFileSync(filePath, { encoding: 'utf-8' });
-  const sourcemapPath = findSourceMap(content);
+  const sourcemapPathResult = findSourceMap(content);
+  return sourcemapPathResult.expect(`Fail to find sourcemap in ${filePath}`);
 }
