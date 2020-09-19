@@ -1,7 +1,7 @@
 import * as Yargs from 'yargs';
 import { existsSync } from 'fs';
 import { EOL } from 'os';
-import { processFile } from './process-file/process-file';
+import { processFile } from './process-file';
 
 type CliArgs = {
   files: readonly string[];
