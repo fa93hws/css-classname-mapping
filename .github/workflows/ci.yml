@@ -24,3 +24,11 @@ jobs:
         run: npm run lint
       - name: Check code style
         run: npm run format
+      - name: Run unit test
+        run: npm run test -- --coverage
+      - name: Report test coverage to codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODE_COV_TOKEN }}
+          file: ./coverage/**/*
+          flags: unittests
