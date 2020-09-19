@@ -4,9 +4,10 @@
   "description": "Generate a classname mapping from a minimified css file and corresponding sourcemap",
   "main": "./bin/css-classname-mapping.js",
   "scripts": {
-    "test": "jest",
     "format": "prettier --check **/*",
-    "lint": "eslint \"src/**/*.ts\""
+    "lint": "eslint \"src/**/*.ts\"",
+    "lint:ts": "tsc --noEmit",
+    "test": "jest"
   },
   "repository": {
     "type": "git",

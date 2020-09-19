@@ -24,6 +24,8 @@ jobs:
         run: npm run lint
       - name: Check code style
         run: npm run format
+      - name: Run typecheck
+        run: npm run lint:ts
       - name: Run unit test
         run: npm run test -- --coverage
       - name: Report test coverage to codecov
