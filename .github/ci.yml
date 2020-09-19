@@ -1,0 +1,24 @@
+name: CI-Test
+
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  ci-test:
+    name: CI-Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Find NPM Cache
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: ${{ runner.OS }}-npm-
+      - name: Run npm
+        run: npm ci
+      - name: Check code style
+        run: npm run format
