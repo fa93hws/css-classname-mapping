@@ -1,11 +1,23 @@
 import * as Yargs from 'yargs';
+import { existsSync } from 'fs';
+import { EOL } from 'os';
+import { processFile } from './process-file/process-file';
 
 type CliArgs = {
   files: readonly string[];
 }
 
+function reportInvalidFiles(files: readonly string[]) {
+  const nonExistingFiles = files.filter(file => !existsSync(file));
+  throw new Error([
+    'the following files do not exists',
+    ...nonExistingFiles,
+  ].join(EOL));
+}
+
 function handler({ files }: CliArgs) {
-  console.log(files);
+  reportInvalidFiles(files);
+  files.forEach(file => processFile(file));
 }
 
 export function main() {
