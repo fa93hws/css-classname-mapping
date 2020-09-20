@@ -1,6 +1,7 @@
-import { EOL } from 'os';
 import * as Yargs from 'yargs';
-import { CssProcessor } from '../processor/css-processor';
+
+import { findSourceMap } from '../processor/find-sourcemap';
+import { getSourceAt, print } from './shared';
 
 type CliArgs = {
   cssFilePath: string;
@@ -9,36 +10,18 @@ type CliArgs = {
 };
 
 async function handler({ cssFilePath, line, column }: CliArgs): Promise<void> {
-  const processor = CssProcessor.fromCssFile(cssFilePath).unwrap();
-  const {
-    source,
-    sourceContent,
-    sourceColumn,
-    sourceLine,
-  } = await processor.getSourceAt({
+  const { sourcemap } = findSourceMap(cssFilePath).unwrap();
+  const sourceLocation = await getSourceAt({
     line,
     column,
+    rawSourcemap: sourcemap.raw,
   });
-  const sep = new Array(source.length).fill('-').join('');
-  const indiactorLine = `${sep.substr(0, sourceColumn)}↑${sep.substr(
-    sourceColumn + 1,
-    source.length,
-  )}`;
-  /* eslint-disable no-console */
-  console.log(sep);
-  console.log(source);
-  console.log(sep);
-  let lines = sourceContent.split(EOL);
-  lines.splice(sourceLine, 0, indiactorLine);
-  lines = lines
-    .slice(Math.max(0, sourceLine - 5), sourceLine + 5 + 1)
-    .filter((l) => l.length > 0);
-  console.log(lines.join(EOL));
-  console.log(sep);
-  /* eslint-enable no-console */
+  print(sourceLocation);
 }
 
 export const FindSourcePositionModule: Yargs.CommandModule<unknown, CliArgs> = {
+  command: 'find-source',
+  describe: 'find the source code based on the position',
   builder: (): Yargs.Argv<CliArgs> =>
     Yargs.option('cssFilePath', {
       demandOption: true,
