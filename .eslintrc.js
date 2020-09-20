@@ -45,6 +45,7 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
 
     'global-require': 'off',
+    'no-continue': 'off',
     'no-underscore-dangle': 'off',
     'no-useless-constructor': 'off',
     'no-empty-function': 'off',

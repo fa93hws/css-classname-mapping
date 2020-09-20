@@ -1,6 +1,6 @@
 import * as Yargs from 'yargs';
 import { FindSourcePositionModule } from './debug/find-source-position';
-import { FindOriginalNameModule } from './debug/find-original-name';
+import { FindOriginalNameModule } from './debug/find-original-classname';
 
 type CliArgs = {
   files: readonly string[];

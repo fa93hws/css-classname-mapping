@@ -1,4 +1,4 @@
-import { Root } from 'postcss';
+import type { Root } from 'postcss';
 import * as selectorParser from 'postcss-selector-parser';
 
 import { Location } from './location';
