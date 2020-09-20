@@ -1,5 +1,4 @@
 import * as Yargs from 'yargs';
-import { CssProcessor } from './processor/css-processor';
 import { FindSourcePositionModule } from './debug/find-source-position';
 import { FindOriginalNameModule } from './debug/find-original-name';
 
@@ -8,7 +7,7 @@ type CliArgs = {
 };
 
 function handler({ files }: CliArgs) {
-  files.forEach((file) => CssProcessor.fromCssFile(file));
+  console.log(files);
 }
 
 export function main(): void {
@@ -23,16 +22,8 @@ export function main(): void {
       }) as any,
     handler,
   })
-    .command(
-      'find-source',
-      'find the source code based on the position',
-      FindSourcePositionModule,
-    )
-    .command(
-      'original-classname',
-      'find the original classname based on the classname',
-      FindOriginalNameModule,
-    )
+    .command(FindSourcePositionModule)
+    .command(FindOriginalNameModule)
     .strict(true)
     .exitProcess(true)
     .demandCommand()
