@@ -1,6 +1,6 @@
 import { EOL } from 'os';
 import { SourceMapConsumer, RawSourceMap } from 'source-map';
-import { yellow } from 'chalk';
+import { yellow, red } from 'chalk';
 
 export async function getSourceAt({
   line,
@@ -52,17 +52,38 @@ export async function getSourceAt({
   });
 }
 
-export function print({
-  source,
-  sourceContent,
-  sourceColumn,
-  sourceLine,
+function highlightClassname({
+  line,
+  classname,
+  column,
 }: {
-  source: string;
-  sourceContent: string;
-  sourceColumn: number;
-  sourceLine: number;
-}): void {
+  line: string;
+  classname: string;
+  column: number;
+}): string {
+  const startIdx = column;
+  const endIdx = startIdx + classname.length + 1;
+  return (
+    yellow(line.slice(0, startIdx)) +
+    red(line.slice(startIdx, endIdx)) +
+    yellow(line.slice(endIdx, line.length))
+  );
+}
+
+export function print(
+  {
+    source,
+    sourceContent,
+    sourceColumn,
+    sourceLine,
+  }: {
+    source: string;
+    sourceContent: string;
+    sourceColumn: number;
+    sourceLine: number;
+  },
+  originalClassname?: string,
+): void {
   const sep = new Array(process.stdout.columns).fill('-').join('');
   const indiactorLine = `${sep.substr(0, sourceColumn)}↑${sep.substr(
     sourceColumn + 1,
@@ -73,8 +94,17 @@ export function print({
   console.log(source);
   console.log(sep);
   let lines = sourceContent.split(EOL);
-  lines.splice(sourceLine, 0, yellow(indiactorLine));
-  lines[sourceLine - 1] = yellow(lines[sourceLine - 1]);
+  lines[sourceLine - 1] =
+    originalClassname == null
+      ? yellow(lines[sourceLine - 1])
+      : highlightClassname({
+          line: lines[sourceLine - 1],
+          classname: originalClassname,
+          column: sourceColumn,
+        });
+  if (originalClassname == null) {
+    lines.splice(sourceLine, 0, yellow(indiactorLine));
+  }
   lines = lines
     .slice(Math.max(0, sourceLine - 6), sourceLine + 6)
     .filter((l) => l.length > 0);

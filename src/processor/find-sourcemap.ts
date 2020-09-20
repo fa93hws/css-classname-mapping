@@ -9,7 +9,7 @@ import { existsSync as _existsSync, readFileSync as _readFileSync } from 'fs';
 
 import { normalizePath } from '../utils/normalize-path';
 
-export type MinifiedCSSInfo = {
+type MinifiedCSSInfo = {
   css: {
     path: string;
     content: string;

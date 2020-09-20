@@ -2,6 +2,10 @@ import * as Yargs from 'yargs';
 
 import { findSourceMap } from '../processor/find-sourcemap';
 import { generateClassnameLocations } from '../processor/classname-location';
+import {
+  serializeKey,
+  getLocationToClassnameFromSourcemap,
+} from '../processor/location-classname';
 import { CssParser } from '../utils/css-parser';
 import { getSourceAt, print } from './shared';
 
@@ -29,7 +33,27 @@ async function handler({ cssFilePath, classname }: CliArgs): Promise<void> {
     column: location.column.start,
     rawSourcemap: sourcemap.raw,
   });
-  print(sourceLocation);
+
+  const locationToClassnames = getLocationToClassnameFromSourcemap(
+    sourcemap.raw,
+    cssParser,
+  ).get(sourceLocation.source);
+  if (locationToClassnames == null) {
+    throw new Error(
+      `source file ${sourceLocation.source} can not be found in sourcemap@${sourcemap.path}`,
+    );
+  }
+  const originalClassname = locationToClassnames.get(
+    serializeKey({
+      line: sourceLocation.sourceLine,
+      column: sourceLocation.sourceColumn,
+    }),
+  );
+  if (originalClassname == null) {
+    throw new Error('Fail to find originalClassname');
+  }
+
+  print(sourceLocation, originalClassname);
 }
 
 export const FindOriginalNameModule: Yargs.CommandModule<unknown, CliArgs> = {
