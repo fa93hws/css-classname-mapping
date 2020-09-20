@@ -36,8 +36,8 @@ describe('collectClassnames', () => {
               end: 6,
             },
             column: {
-              start: 2,
-              end: 5,
+              start: 3,
+              end: 6,
             },
           },
         ],

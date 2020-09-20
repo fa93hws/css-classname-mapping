@@ -1,14 +1,11 @@
 import * as Yargs from 'yargs';
 import { FindSourcePositionModule } from './debug/find-source-position';
 import { FindOriginalNameModule } from './debug/find-original-classname';
+import { processFile } from './processor/process-file';
 
 type CliArgs = {
   files: readonly string[];
 };
-
-function handler({ files }: CliArgs) {
-  console.log(files);
-}
 
 export function main(): void {
   Yargs.command('$0 <files...>', 'generate css classname mapping', {
@@ -20,7 +17,7 @@ export function main(): void {
         // see https://github.com/yargs/yargs/issues/1392
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       }) as any,
-    handler,
+    handler: ({ files }: CliArgs) => files.forEach(processFile),
   })
     .command(FindSourcePositionModule)
     .command(FindOriginalNameModule)
