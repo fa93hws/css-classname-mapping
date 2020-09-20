@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/fa93hws/css-classname-mapping#readme",
   "dependencies": {
+    "chalk": "^4.1.0",
     "jest": "^26.4.2",
     "postcss": "^8.0.5",
     "postcss-selector-parser": "^6.0.2",

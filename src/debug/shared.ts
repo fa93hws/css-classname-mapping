@@ -1,5 +1,6 @@
 import { EOL } from 'os';
 import { SourceMapConsumer, RawSourceMap } from 'source-map';
+import { yellow } from 'chalk';
 
 export async function getSourceAt({
   line,
@@ -62,17 +63,18 @@ export function print({
   sourceColumn: number;
   sourceLine: number;
 }): void {
-  const sep = new Array(source.length).fill('-').join('');
+  const sep = new Array(process.stdout.columns).fill('-').join('');
   const indiactorLine = `${sep.substr(0, sourceColumn)}↑${sep.substr(
     sourceColumn + 1,
-    source.length,
+    process.stdout.columns,
   )}`;
   /* eslint-disable no-console */
   console.log(sep);
   console.log(source);
   console.log(sep);
   let lines = sourceContent.split(EOL);
-  lines.splice(sourceLine, 0, indiactorLine);
+  lines.splice(sourceLine, 0, yellow(indiactorLine));
+  lines[sourceLine - 1] = yellow(lines[sourceLine - 1]);
   lines = lines
     .slice(Math.max(0, sourceLine - 6), sourceLine + 6)
     .filter((l) => l.length > 0);
