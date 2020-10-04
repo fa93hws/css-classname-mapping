@@ -1,40 +1,18 @@
-type Range = {
-  start: number;
-  end: number;
-};
-
 /**
  * To be consisitent with source-map
  * line starts from 1 but column starts from 0
  */
 export class Location {
-  readonly line: Range;
+  readonly line: number;
 
-  readonly column: Range;
+  readonly column: number;
 
-  private constructor({ line, column }: { line: Range; column: Range }) {
+  constructor({ line, column }: { line: number; column: number }) {
     this.line = line;
     this.column = column;
   }
 
-  offset({ line, column }: { line: number; column: number }): Location {
-    return new Location({
-      line: {
-        start: this.line.start + line,
-        end: this.line.end + line,
-      },
-      column: {
-        start: this.column.start + column,
-        end: this.column.end + column,
-      },
-    });
-  }
-
-  isOnSameline(): boolean {
-    return this.line.start === this.line.end;
-  }
-
-  static fromNodeSource(source: {
+  static fromPostcssNodeSource(source: {
     start?: { line: number; column: number };
     end?: { line: number; column: number };
   }): Location {
@@ -42,18 +20,34 @@ export class Location {
       throw new Error('fail to find classname position');
     }
     return new Location({
-      line: {
-        start: source.start.line,
-        end: source.end.line,
-      },
+      line: source.start.line,
       /* column from postcss starts from 1
        * while we want it starts from 0
        * according to source-map
        */
-      column: {
-        start: source.start.column - 1,
-        end: source.end.column - 1,
-      },
+      column: source.start.column - 1,
     });
+  }
+
+  static fromSerializedKey(key: string): Location {
+    const regex = /^(\d+):(\d+)$/;
+    const match = regex.exec(key);
+    if (match == null || match.length !== 3) {
+      throw new Error(`fail to deserialize key ${key}`);
+    }
+    const [, lineStr, columnStr] = match;
+    const line = parseInt(lineStr, 10);
+    if (Number.isNaN(line)) {
+      throw new Error(`failed to parse line ${lineStr}`);
+    }
+    const column = parseInt(columnStr, 10);
+    if (Number.isNaN(column)) {
+      throw new Error(`failed to parse column ${column}`);
+    }
+    return new Location({ line, column });
+  }
+
+  serialize(): string {
+    return `${this.line}:${this.column}`;
   }
 }

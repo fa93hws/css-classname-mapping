@@ -2,41 +2,27 @@ import { Location } from '../location';
 
 describe('fromNodeSource', () => {
   it('convert the source to location', () => {
-    const location = Location.fromNodeSource({
+    const location = Location.fromPostcssNodeSource({
       start: { line: 1, column: 2 },
       end: { line: 2, column: 4 },
     });
-    expect(location.line).toEqual({ start: 1, end: 2 });
-    expect(location.column).toEqual({ start: 1, end: 3 });
+    expect(location.line).toEqual(1);
+    expect(location.column).toEqual(1);
   });
 });
 
-describe('isOnSameLine', () => {
-  it('is on same line if lines are same on start and end', () => {
-    const location = Location.fromNodeSource({
-      start: { line: 1, column: 2 },
-      end: { line: 1, column: 4 },
-    });
-    expect(location.isOnSameline()).toEqual(true);
-  });
-
-  it('is not on same line if lines are different on start and end', () => {
-    const location = Location.fromNodeSource({
-      start: { line: 1, column: 2 },
-      end: { line: 2, column: 4 },
-    });
-    expect(location.isOnSameline()).toEqual(false);
+describe('serializeKey', () => {
+  it('join the line and number', () => {
+    const key = new Location({ line: 1, column: 2 }).serialize();
+    expect(key).toEqual('1:2');
   });
 });
 
-describe('offset', () => {
-  it('offset the line and column correctly', () => {
-    const location = Location.fromNodeSource({
-      start: { line: 1, column: 2 },
-      end: { line: 2, column: 4 },
-    });
-    const result = location.offset({ line: 2, column: 2 });
-    expect(result.column).toEqual({ start: 3, end: 5 });
-    expect(result.line).toEqual({ start: 3, end: 4 });
+describe('deserializeKey', () => {
+  it('deserialize the given key', () => {
+    const key = '1:2';
+    const location = Location.fromSerializedKey(key);
+    expect(location.line).toEqual(1);
+    expect(location.column).toEqual(2);
   });
 });
