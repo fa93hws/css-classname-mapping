@@ -1,6 +1,6 @@
 import * as Yargs from 'yargs';
-// import { FindSourcePositionModule } from './debug/find-source-position';
-// import { FindOriginalNameModule } from './debug/find-original-classname';
+import { FindSourcePositionModule } from './debug/find-source-position';
+import { FindOriginalNameModule } from './debug/find-original-classname';
 import { processFile } from './processor/process-file';
 
 type CliArgs = {
@@ -19,8 +19,8 @@ export function main(): void {
       }) as any,
     handler: ({ files }: CliArgs) => files.forEach(processFile),
   })
-    // .command(FindSourcePositionModule)
-    // .command(FindOriginalNameModule)
+    .command(FindSourcePositionModule)
+    .command(FindOriginalNameModule)
     .strict(true)
     .exitProcess(true)
     .demandCommand()
