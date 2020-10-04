@@ -1,0 +1,345 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`processFile generate mapping for multiple files 1`] = `
+Object {
+  "BFpQDNJ62UOlaB933I4jA": Array [
+    Object {
+      "classname": "emptyCartWrapper",
+      "source": "webpack:///cart.css",
+    },
+  ],
+  "DmVGGw": Array [
+    Object {
+      "classname": "dog",
+      "source": "webpack:///pages/dummy/fakes/fake_component.css",
+    },
+  ],
+  "E9sfBenJb2vrfMALrKIwF": Array [
+    Object {
+      "classname": "itemImg",
+      "source": "webpack:///menu-items.css",
+    },
+  ],
+  "FHa0MQ": Array [
+    Object {
+      "classname": "foo",
+      "source": "webpack:///pages/dummy/fakes/foo.css",
+    },
+  ],
+  "GWn3Lg": Array [
+    Object {
+      "classname": "boy",
+      "source": "webpack:///pages/dummy/fakes/fake_component.css",
+    },
+  ],
+  "HHNCVg": Array [
+    Object {
+      "classname": "fakeComponent",
+      "source": "webpack:///pages/dummy/fakes/fake_component.css",
+    },
+    Object {
+      "classname": "fakeComponent",
+      "source": "webpack:///pages/dummy/fakes/fake_component2.css",
+    },
+  ],
+  "IGlTFQ": Array [
+    Object {
+      "classname": "gold",
+      "source": "webpack:///pages/dummy/fakes/fake_component.css",
+    },
+  ],
+  "JYYVmvVrh64RkTqH6K0hD": Array [
+    Object {
+      "classname": "img",
+      "source": "webpack:///cart.css",
+    },
+  ],
+  "P28ZkrQteFEke19CiGj9m": Array [
+    Object {
+      "classname": "nameContainer",
+      "source": "webpack:///cart.css",
+    },
+  ],
+  "R7j1Nfa3LjNycEIPp_iDH": Array [
+    Object {
+      "classname": "menuListWrapper",
+      "source": "webpack:///menu.css",
+    },
+  ],
+  "Rebjuw": Array [
+    Object {
+      "classname": "bar",
+      "source": "webpack:///pages/dummy/fakes/fake_component.css",
+    },
+  ],
+  "Tt7OJQ": Array [
+    Object {
+      "classname": "foo",
+      "source": "webpack:///pages/dummy/fakes/fake_component.css",
+    },
+  ],
+  "U903it5lvim_DL1fCiq3f": Array [
+    Object {
+      "classname": "carouselContainer",
+      "source": "webpack:///carousel.css",
+    },
+  ],
+  "ZHL81Jgo4v7QBES0IrBP8": Array [
+    Object {
+      "classname": "settlementButtonWrapper",
+      "source": "webpack:///cart.css",
+    },
+  ],
+  "ZlsV-AlqhtczpPaE09QdU": Array [
+    Object {
+      "classname": "quantityWrapper",
+      "source": "webpack:///menu-items.css",
+    },
+  ],
+  "_-di0Q": Array [
+    Object {
+      "classname": "bar",
+      "source": "webpack:///pages/dummy/fakes/bar.css",
+    },
+  ],
+  "_0qzQbw": Array [
+    Object {
+      "classname": "baz",
+      "source": "webpack:///pages/dummy/fakes/fake_component.css",
+    },
+  ],
+  "_1A1J4xlpKobkX8JfUa45uQ": Array [
+    Object {
+      "classname": "paymentContainer",
+      "source": "webpack:///cart.css",
+    },
+  ],
+  "_1A7462naFMcSgjKyEsKjS9": Array [
+    Object {
+      "classname": "buttonWrapper",
+      "source": "webpack:///menu.css",
+    },
+  ],
+  "_1A94Db0ZH6ozSo4Y5upENp": Array [
+    Object {
+      "classname": "cardSectionContainer",
+      "source": "webpack:///menu.css",
+    },
+  ],
+  "_1VuT3inJLojeteNNdUvSeh": Array [
+    Object {
+      "classname": "container",
+      "source": "webpack:///cart.css",
+    },
+  ],
+  "_1fPd-7XrFfpuuLiqIhZNih": Array [
+    Object {
+      "classname": "subtitleWrapper",
+      "source": "webpack:///dish-grid.css",
+    },
+  ],
+  "_1jY1h2qego6cmSVUV4c6oW": Array [
+    Object {
+      "classname": "itemWrapper",
+      "source": "webpack:///menu-items.css",
+    },
+  ],
+  "_2-h4JyPN1zty-2ezUETtgX": Array [
+    Object {
+      "classname": "menuItemsWrapper",
+      "source": "webpack:///menu.css",
+    },
+  ],
+  "_20YIbCYwozfR1crcXtf74J": Array [
+    Object {
+      "classname": "image",
+      "source": "webpack:///carousel.css",
+    },
+  ],
+  "_2AzRPdTLc3tYTTqYfOcRn3": Array [
+    Object {
+      "classname": "cartIconWrapper",
+      "source": "webpack:///menu.css",
+    },
+  ],
+  "_2Lo9r3DIpLfXINNKXdnqin": Array [
+    Object {
+      "classname": "titleWrapper",
+      "source": "webpack:///category.css",
+    },
+  ],
+  "_2NW5Gqlp6U0MxMHZF8Cyn0": Array [
+    Object {
+      "classname": "priceWrapper",
+      "source": "webpack:///menu.css",
+    },
+  ],
+  "_2l-73rAeK9HNiIdxNyHGq-": Array [
+    Object {
+      "classname": "quantityControlWrapper",
+      "source": "webpack:///cart.css",
+    },
+  ],
+  "_2ll7Xt6a1l-Ihmzih7_ceO": Array [
+    Object {
+      "classname": "container",
+      "source": "webpack:///menu.css",
+    },
+  ],
+  "_2ne6-q6N6YmOSqGj7y-Re_": Array [
+    Object {
+      "classname": "imgContainer",
+      "source": "webpack:///cart.css",
+    },
+  ],
+  "_2tbeS65Uv9p8YgM1sDkKbA": Array [
+    Object {
+      "classname": "menuWrapper",
+      "source": "webpack:///menu.css",
+    },
+  ],
+  "_35-2JpizhBHmYg-1nBBIk2": Array [
+    Object {
+      "classname": "quantityControlItem",
+      "source": "webpack:///cart.css",
+    },
+  ],
+  "_3N5ioClhweSODWrnZSzebk": Array [
+    Object {
+      "classname": "mainContainer",
+      "source": "webpack:///global.css",
+    },
+  ],
+  "_3PsbIE_FLVJ3gR42_KuxFf": Array [
+    Object {
+      "classname": "categoryIcon",
+      "source": "webpack:///home.css",
+    },
+  ],
+  "_3QSbfmDpc-fDNTOFkZSi-k": Array [
+    Object {
+      "classname": "controlWrapper",
+      "source": "webpack:///dish-grid.css",
+    },
+  ],
+  "_3R04rJ5KZsvDV4l0ilrzFt": Array [
+    Object {
+      "classname": "carouselWrapper",
+      "source": "webpack:///carousel.css",
+    },
+  ],
+  "_3UhAfYE8ikBH_9WJZezPdi": Array [
+    Object {
+      "classname": "link",
+      "source": "webpack:///home.css",
+    },
+  ],
+  "_3cyTRp_QEE8P3iHh4Sk6xG": Array [
+    Object {
+      "classname": "carouselItem",
+      "source": "webpack:///carousel.css",
+    },
+  ],
+  "_3nUa7Vg_7poLNWjvPUZKNf": Array [
+    Object {
+      "classname": "rootContainer",
+      "source": "webpack:///global.css",
+    },
+  ],
+  "_Zwvmw": Array [
+    Object {
+      "classname": "apple",
+      "source": "webpack:///pages/dummy/fakes/fake_component.css",
+    },
+  ],
+  "auy1LigLCFwil0QvzoQJf": Array [
+    Object {
+      "classname": "itemTextWrapper",
+      "source": "webpack:///menu-items.css",
+    },
+  ],
+  "ce-FMt6gHZosmh0dV2SCM": Array [
+    Object {
+      "classname": "categoryItem",
+      "source": "webpack:///home.css",
+    },
+  ],
+  "lXfJHQ": Array [
+    Object {
+      "classname": "ele",
+      "source": "webpack:///pages/dummy/fakes/fake_component.css",
+    },
+  ],
+  "tHNuqw": Array [
+    Object {
+      "classname": "cat",
+      "source": "webpack:///pages/dummy/fakes/fake_component.css",
+    },
+  ],
+}
+`;
+
+exports[`processFile generate mapping for one file 1`] = `
+Object {
+  "DmVGGw": Array [
+    Object {
+      "classname": "dog",
+      "source": "webpack:///pages/dummy/fakes/fake_component.css",
+    },
+  ],
+  "GWn3Lg": Array [
+    Object {
+      "classname": "boy",
+      "source": "webpack:///pages/dummy/fakes/fake_component.css",
+    },
+  ],
+  "HHNCVg": Array [
+    Object {
+      "classname": "fakeComponent",
+      "source": "webpack:///pages/dummy/fakes/fake_component.css",
+    },
+  ],
+  "IGlTFQ": Array [
+    Object {
+      "classname": "gold",
+      "source": "webpack:///pages/dummy/fakes/fake_component.css",
+    },
+  ],
+  "Rebjuw": Array [
+    Object {
+      "classname": "bar",
+      "source": "webpack:///pages/dummy/fakes/fake_component.css",
+    },
+  ],
+  "Tt7OJQ": Array [
+    Object {
+      "classname": "foo",
+      "source": "webpack:///pages/dummy/fakes/fake_component.css",
+    },
+  ],
+  "_0qzQbw": Array [
+    Object {
+      "classname": "baz",
+      "source": "webpack:///pages/dummy/fakes/fake_component.css",
+    },
+  ],
+  "_Zwvmw": Array [
+    Object {
+      "classname": "apple",
+      "source": "webpack:///pages/dummy/fakes/fake_component.css",
+    },
+  ],
+  "lXfJHQ": Array [
+    Object {
+      "classname": "ele",
+      "source": "webpack:///pages/dummy/fakes/fake_component.css",
+    },
+  ],
+  "tHNuqw": Array [
+    Object {
+      "classname": "cat",
+      "source": "webpack:///pages/dummy/fakes/fake_component.css",
+    },
+  ],
+}
+`;
