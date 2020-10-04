@@ -1,7 +1,7 @@
 import { RawSourceMap, SourceMapConsumer } from 'source-map';
 
 import { pairSelectors } from './selectors-pairing';
-import { ClassnameMapping, OutputObject } from './classname-mapping';
+import type { ClassnameMapping, OutputObject } from './classname-mapping';
 import { CssParser } from '../utils/css-parser';
 import { Location } from './location';
 import { findSourceMap } from './find-sourcemap';
@@ -104,8 +104,8 @@ async function generateMapping(
   minifiedLocToSelector: LocationToSelector,
   sourceLocToSelector: Map<string, LocationToSelector>,
   sourcemap: RawSourceMap,
+  classnameMapping: ClassnameMapping,
 ): Promise<OutputObject> {
-  const classnameMapping = new ClassnameMapping();
   const promises = Array.from(minifiedLocToSelector).map(
     async ([minifiedLoc, minifiedSelector]) => {
       const originalSelector = await getOriginalSelectors(
@@ -132,7 +132,10 @@ async function generateMapping(
   return classnameMapping.toOutputObject();
 }
 
-export async function processFile(cssFilePath: string): Promise<void> {
+export async function processFile(
+  cssFilePath: string,
+  classnameMapping: ClassnameMapping,
+): Promise<void> {
   const cssParser = new CssParser();
   const { css, sourcemap } = findSourceMap(cssFilePath).unwrap();
   const minifiedCssRootNode = cssParser.parseFromContent({
@@ -148,10 +151,11 @@ export async function processFile(cssFilePath: string): Promise<void> {
     cssParser,
   );
   try {
-    const output = await generateMapping(
+    await generateMapping(
       minifiedLocToSelector,
       sourceLocToSelector,
       sourcemap.raw,
+      classnameMapping,
     );
   } catch (e) {
     // eslint-disable-next-line no-console
