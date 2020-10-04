@@ -14,7 +14,7 @@
     "type": "git",
     "url": "git+https://github.com/fa93hws/css-classname-mapping.git"
   },
-  "bin": "./bin/css-classname-mapping.js",
+  "bin": "./dist/bin.js",
   "keywords": [
     "css",
     "sourcemap"
