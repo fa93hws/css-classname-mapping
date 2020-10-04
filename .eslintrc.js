@@ -36,7 +36,7 @@ module.exports = {
     'import/no-extraneous-dependencies': [
       'error',
       {
-        devDependencies: ['tests/**/*.ts'],
+        devDependencies: ['**/tests/**/*.ts'],
       },
     ],
     'import/no-dynamic-require': 'off',
