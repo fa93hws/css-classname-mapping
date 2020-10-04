@@ -10,7 +10,7 @@ import {
   LocationToSelector,
 } from './selector-location';
 
-async function getOriginalSelectors(
+export async function getOriginalSelectors(
   serializedLoc: string,
   sourcemap: RawSourceMap,
   // source -> Map<location serielized key, classname>
@@ -18,6 +18,8 @@ async function getOriginalSelectors(
 ): Promise<{
   selector: string;
   file: string;
+  sourceContent: string;
+  sourceLocation: Location;
 }> {
   return new Promise((resolve, reject) => {
     const location = Location.fromSerializedKey(serializedLoc);
@@ -54,15 +56,24 @@ async function getOriginalSelectors(
           ),
         );
       }
+
+      const sourcePathIdx = sourcemap.sources.findIndex(
+        (path) => path === sourcePath,
+      );
+      if (sourcemap.sourcesContent == null) {
+        return reject(new Error('sourcecontent is null'));
+      }
       return resolve({
         selector: originalSelector,
         file: sourcePath,
+        sourceLocation,
+        sourceContent: sourcemap.sourcesContent[sourcePathIdx],
       });
     });
   });
 }
 
-function generateLocationToSelectorFromSources(
+export function generateLocationToSelectorFromSources(
   sourcemap: RawSourceMap,
   cssParser: CssParser,
 ): Map<string, LocationToSelector> {
