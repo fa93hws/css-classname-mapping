@@ -1,89 +1,152 @@
-import { EOL } from 'os';
-import type { RawSourceMap } from 'source-map';
+import { RawSourceMap, SourceMapConsumer } from 'source-map';
 
+import { pairSelectors } from './selectors-pairing';
+import { ClassnameMapping, OutputObject } from './classname-mapping';
 import { CssParser } from '../utils/css-parser';
 import { Location } from './location';
 import { findSourceMap } from './find-sourcemap';
-import { generateClassnameLocations } from './classname-location';
 import {
-  getLocationToClassnameFromSourcemap,
-  serializeKey,
-} from './location-classname';
-import { getSourceAt } from '../debug/shared';
+  generateLocationToSelector,
+  LocationToSelector,
+} from './selector-location';
 
-async function findOriginalClassnameByMinifiedLoc(
-  minifiedLoc: Location,
+async function getOriginalSelectors(
+  serializedLoc: string,
   sourcemap: RawSourceMap,
   // source -> Map<location serielized key, classname>
-  sourceLocToClass: Map<string, Map<string, string>>,
-): Promise<string> {
-  const sourceLocation = await getSourceAt({
-    line: minifiedLoc.line.start,
-    column: minifiedLoc.column.start,
-    rawSourcemap: sourcemap,
+  sourceLocToSelector: Map<string, LocationToSelector>,
+): Promise<{
+  selector: string;
+  file: string;
+}> {
+  return new Promise((resolve, reject) => {
+    const location = Location.fromSerializedKey(serializedLoc);
+    SourceMapConsumer.with(sourcemap, null, (consumer) => {
+      const {
+        source: sourcePath,
+        line: sourceLine,
+        column: sourceColumn,
+      } = consumer.originalPositionFor(location);
+      if (sourcePath == null || sourceLine == null || sourceColumn == null) {
+        return reject(
+          new Error(`fail to find the original location @${serializedLoc}`),
+        );
+      }
+      const locationToSelector = sourceLocToSelector.get(sourcePath);
+      if (locationToSelector == null) {
+        return reject(
+          new Error(
+            `fail to get location to selector mapping for ${sourcePath}`,
+          ),
+        );
+      }
+      const sourceLocation = new Location({
+        line: sourceLine,
+        column: sourceColumn,
+      });
+      const originalSelector = locationToSelector.get(
+        sourceLocation.serialize(),
+      );
+      if (originalSelector == null) {
+        return reject(
+          new Error(
+            `fail to get original selector@${sourceLocation.serialize()} in ${sourceLocation}`,
+          ),
+        );
+      }
+      return resolve({
+        selector: originalSelector,
+        file: sourcePath,
+      });
+    });
   });
-  const localSourceLocToClass = sourceLocToClass.get(sourceLocation.source);
-  if (localSourceLocToClass == null) {
-    throw new Error(
-      `source file ${sourceLocation.source} can not be found in sourcemap for ${sourcemap.file}`,
-    );
-  }
-  const originalClassname = localSourceLocToClass.get(
-    serializeKey({
-      line: sourceLocation.sourceLine,
-      column: sourceLocation.sourceColumn,
-    }),
-  );
-  if (originalClassname == null) {
-    const errorMessage = [
-      'Fail to find originalClassname',
-      `Trying to search line=${sourceLocation.sourceLine}, column=${sourceLocation.sourceColumn}`,
-      `minifiedLoc is ${JSON.stringify(minifiedLoc)}@${sourcemap.file}`,
-    ].join(EOL);
-    throw new Error(errorMessage);
-  }
-  return originalClassname;
 }
 
-export function processFile(cssFilePath: string): void {
+function generateLocationToSelectorFromSources(
+  sourcemap: RawSourceMap,
+  cssParser: CssParser,
+): Map<string, LocationToSelector> {
+  const output = new Map<string, LocationToSelector>();
+  const { sources: paths, sourcesContent: contents } = sourcemap;
+  if (contents == null) {
+    throw new Error('content can not be empty');
+  }
+  if (paths.length !== contents.length) {
+    throw new Error('lengh of the paths and contents do not match');
+  }
+  for (let idx = 0; idx < paths.length; idx += 1) {
+    const path = paths[idx];
+    const rootNode = cssParser.parseFromContent({
+      content: contents[idx],
+      cacheKey: path,
+    });
+    const locationToSelector = generateLocationToSelector({
+      rootNode,
+      cacheKey: path,
+    });
+    output.set(path, locationToSelector);
+  }
+  return output;
+}
+
+async function generateMapping(
+  minifiedLocToSelector: LocationToSelector,
+  sourceLocToSelector: Map<string, LocationToSelector>,
+  sourcemap: RawSourceMap,
+): Promise<OutputObject> {
+  const classnameMapping = new ClassnameMapping();
+  const promises = Array.from(minifiedLocToSelector).map(
+    async ([minifiedLoc, minifiedSelector]) => {
+      const originalSelector = await getOriginalSelectors(
+        minifiedLoc,
+        sourcemap,
+        sourceLocToSelector,
+      );
+      const localMapping = pairSelectors({
+        minified: minifiedSelector,
+        original: originalSelector.selector,
+      });
+      localMapping.forEach((originalClassnames, minifiedClassname) => {
+        originalClassnames.forEach((originalClassname) => {
+          classnameMapping.set({
+            minified: minifiedClassname,
+            original: originalClassname,
+            sourceFile: originalSelector.file,
+          });
+        });
+      });
+    },
+  );
+  await Promise.all(promises);
+  return classnameMapping.toOutputObject();
+}
+
+export async function processFile(cssFilePath: string): Promise<void> {
   const cssParser = new CssParser();
   const { css, sourcemap } = findSourceMap(cssFilePath).unwrap();
   const minifiedCssRootNode = cssParser.parseFromContent({
     content: css.content,
     cacheKey: css.path,
   });
-  const minifiedClassToLoc = generateClassnameLocations({
-    path: css.path,
+  const minifiedLocToSelector = generateLocationToSelector({
     rootNode: minifiedCssRootNode,
+    cacheKey: css.path,
   });
-  const sourceLocToClass = getLocationToClassnameFromSourcemap(
+  const sourceLocToSelector = generateLocationToSelectorFromSources(
     sourcemap.raw,
     cssParser,
   );
-  return;
-  // minified name -> original name
-  const nameMapping = new Map<string, string>();
-  const promises: Promise<void>[] = [];
-  minifiedClassToLoc.forEach((location, classname) => {
-    const promise = new Promise<void>((resolve) => {
-      findOriginalClassnameByMinifiedLoc(
-        location,
-        sourcemap.raw,
-        sourceLocToClass,
-      )
-        .then((originalClassname) => {
-          nameMapping.set(classname, originalClassname);
-          resolve();
-        })
-        .catch((e) => {
-          // eslint-disable-next-line no-console
-          console.error(e);
-          process.exit(1);
-        });
-    });
-    promises.push(promise);
-  });
-  Promise.all(promises).then(() => {
-    console.log(nameMapping);
-  });
+  try {
+    const output = await generateMapping(
+      minifiedLocToSelector,
+      sourceLocToSelector,
+      sourcemap.raw,
+    );
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error(`fail to process file ${cssFilePath}`);
+    // eslint-disable-next-line no-console
+    console.error(e);
+    process.exit(1);
+  }
 }

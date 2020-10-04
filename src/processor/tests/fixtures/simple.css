@@ -12,3 +12,18 @@ ul .bar {
   width: 100px;
   height: 200px;
 }
+
+.bar,
+.baz {
+  color: red;
+}
+
+  ul:first-child {
+  color: green;
+}
+
+.bar:last-child > .baz:nth-child(2) {
+  font-size: 14px;
+}
+
+.a { color: red } .b { color: bisque }
